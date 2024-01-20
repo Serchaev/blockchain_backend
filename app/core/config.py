@@ -19,7 +19,7 @@ class Setting(BaseSettings):
     @property
     def db_url(self) -> str:
         if self.MODE == "DEV":
-            return f"postgresql+asyncpg://{self.DB_USER}:{self.DB_PASS}@{self.DB_HOST}:{self.DB_PORT}/dev_{self.DB_NAME}"
+            return f"postgresql+asyncpg://{self.DB_USER}:{self.DB_PASS}@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}"
         if self.MODE == "TEST":
             return f"postgresql+asyncpg://{self.DB_USER}:{self.DB_PASS}@{self.DB_HOST}:{self.DB_PORT}/test_{self.DB_NAME}"
         if self.MODE == "PROD":

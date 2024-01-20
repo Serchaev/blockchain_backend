@@ -41,12 +41,11 @@ class DatabaseFactory:
         return session
 
     async def session_depends(self):
-        session = self.get_scoped_session()
         try:
-            async with session() as s:
-                yield s
+            async with self.session_factory() as session:
+                yield session
         finally:
-            await session.remove()
+            await session.close()
 
 
 db_factory = DatabaseFactory(
