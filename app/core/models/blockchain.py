@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 
 from datetime import datetime
 
@@ -14,8 +14,8 @@ class Blockchain(Base):
     __tablename__ = "blockchain"
 
     segment_id: Mapped[str] = mapped_column(unique=True)
-    title: Mapped[str]
-    descr: Mapped[str]
-    deleted: Mapped[bool]
+    title: Mapped[Optional[str]]
+    descr: Mapped[Optional[str]]
+    deleted: Mapped[Optional[bool]]
 
     blocks: Mapped[list["Block"]] = relationship(back_populates="blockchain")
