@@ -1,8 +1,13 @@
+from typing import TYPE_CHECKING
+
 from sqlalchemy import ForeignKey
 from sqlalchemy.dialects.postgresql import JSONB
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from ..database import Base
+
+if TYPE_CHECKING:
+    from .blockchain import Blockchain
 
 
 class Block(Base):
@@ -15,3 +20,4 @@ class Block(Base):
     blockchain_id: Mapped[str] = mapped_column(
         ForeignKey("blockchain.id"),
     )
+    blockchain: Mapped["Blockchain"] = relationship(back_populates="blocks")

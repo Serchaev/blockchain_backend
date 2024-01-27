@@ -1,8 +1,13 @@
+from typing import TYPE_CHECKING
+
 from datetime import datetime
 
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from ..database import Base
+
+if TYPE_CHECKING:
+    from .block import Block
 
 
 class Blockchain(Base):
@@ -12,3 +17,5 @@ class Blockchain(Base):
     title: Mapped[str]
     descr: Mapped[str]
     deleted: Mapped[bool]
+
+    blocks: Mapped[list["Block"]] = relationship(back_populates="blockchain")
