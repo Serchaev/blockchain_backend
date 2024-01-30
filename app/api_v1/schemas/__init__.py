@@ -4,3 +4,5 @@ from .blockchain_schemas import (
     BlockchainSchemaAnswerPagination,
     BlockchainSchemaQueryPagination,
 )
+
+from .block_schemas import BlockSchemaBody
