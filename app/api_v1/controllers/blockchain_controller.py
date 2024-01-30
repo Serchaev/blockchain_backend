@@ -1,9 +1,6 @@
-from typing import Optional
-
-from fastapi import HTTPException, status, Depends
+from fastapi import HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.api_v1.dependencies import BlockchainFindDepends
 from app.api_v1.schemas import BlockchainSchemaBody
 from app.api_v1.services import BlockchainService
 from app.core import Blockchain
