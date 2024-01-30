@@ -21,3 +21,9 @@ class Block(Base):
         ForeignKey("blockchain.id"),
     )
     blockchain: Mapped["Blockchain"] = relationship(back_populates="blocks")
+
+    def __str__(self):
+        return f'{self.__class__.__name__}(id={self.id}, blockchain_id={self.blockchain_id}, data="{self.data}", previous_hash="{self.previous_hash}", actual_hash="{self.actual_hash}", timestamp={self.timestamp})'
+
+    def __repr__(self):
+        return self.__str__()

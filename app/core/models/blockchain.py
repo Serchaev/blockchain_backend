@@ -19,3 +19,11 @@ class Blockchain(Base):
     deleted: Mapped[Optional[bool]]
 
     blocks: Mapped[list["Block"]] = relationship(back_populates="blockchain")
+
+    def __str__(self):
+        return (
+            f'{self.__class__.__name__}(id={self.id}, segment_id="{self.segment_id}")'
+        )
+
+    def __repr__(self):
+        return self.__str__()
