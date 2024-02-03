@@ -7,6 +7,7 @@ from app.api_v1.schemas import (
     BlockSchemaQueryPagination,
     BlockSchemaQuery,
     BlockSchemaAnswer,
+    BlockSchemaAnswerPagination,
 )
 from app.core import db_factory
 
@@ -22,7 +23,7 @@ async def get_blocks(
     block_data: BlockSchemaQuery = Depends(BlockSchemaQuery),
     pagination: BlockSchemaQueryPagination = Depends(BlockSchemaQueryPagination),
     session: AsyncSession = Depends(db_factory.session_depends),
-):
+) -> BlockSchemaAnswerPagination:
     return await BlockController.get_blocks(
         session=session,
         segment_id=block_data.segment_id,
@@ -31,7 +32,7 @@ async def get_blocks(
     )
 
 
-@router.get("{id}", status_code=status.HTTP_200_OK)
+@router.get("/{id}", status_code=status.HTTP_200_OK)
 @cache(expire=300)
 async def get_block(
     id: int,

@@ -27,8 +27,6 @@ class BlockController:
             session=session,
             segment_id=segment_id,
         )
-        for block in blocks:
-            block.data = json.loads(block.data)
         answer = {"blocks": blocks, "count": blocks_count}
         return answer
 

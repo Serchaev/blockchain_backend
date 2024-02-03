@@ -6,7 +6,7 @@ from pydantic import BaseModel
 class BlockSchema(BaseModel):
     blockchain_id: int
     timestamp: Optional[float]
-    data: list[dict]
+    data: str
 
 
 class _BlockchainSchema(BaseModel):
