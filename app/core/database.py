@@ -1,5 +1,6 @@
 from asyncio import current_task
 
+import redis
 from sqlalchemy.orm import (
     DeclarativeBase,
     Mapped,
@@ -49,6 +50,18 @@ class DatabaseFactory:
 db_factory = DatabaseFactory(
     db_url=settings.db_url,
     db_echo=settings.db_echo,
+)
+
+
+class RedisFactory:
+    def __init__(self, host, port):
+        self.host = host
+        self.port = port
+
+
+redis_factory = RedisFactory(
+    host=settings.REDIS_HOST,
+    port=settings.REDIS_PORT,
 )
 
 
