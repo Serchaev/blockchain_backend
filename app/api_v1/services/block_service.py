@@ -1,9 +1,10 @@
+import time
+
 from sqlalchemy import select, func
 from sqlalchemy.engine import Result
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import joinedload
 
-from app.api_v1.schemas import BlockSchemaBody
 from app.core import Block, Blockchain
 
 
@@ -54,9 +55,34 @@ class BlockService:
     @staticmethod
     async def create(
         session: AsyncSession,
-        block_data: BlockSchemaBody,
+        **kwargs,
     ) -> Block:
-        block = Block(**block_data.model_dump(exclude_none=True))
+        block = Block(**kwargs)
+        session.add(block)
+        await session.commit()
+        return block
+
+    @staticmethod
+    async def create_genesis_block(
+        session: AsyncSession,
+        blockchain_id: int,
+    ) -> Block:
+        block = Block(
+            timestamp=time.time(),
+            data=str(
+                [
+                    {
+                        "writer": "",
+                        "reader": "",
+                        "message": "Genesis Block",
+                        "file": None,
+                        "timestamp": f"{time.time()}",
+                    }
+                ]
+            ),
+            previous_hash="0",
+            blockchain_id=blockchain_id,
+        )
         session.add(block)
         await session.commit()
         return block
