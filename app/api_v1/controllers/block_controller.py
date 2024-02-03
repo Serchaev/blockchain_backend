@@ -29,7 +29,6 @@ class BlockController:
         )
         for block in blocks:
             block.data = json.loads(block.data)
-        # await asyncio.sleep(5)
         answer = {"blocks": blocks, "count": blocks_count}
         return answer
 
