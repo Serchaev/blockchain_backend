@@ -37,6 +37,16 @@ class BlockchainService:
         return result.scalar_one_or_none()
 
     @staticmethod
+    async def find_by_id(
+        session: AsyncSession,
+        id: int,
+    ) -> Optional[Blockchain]:
+        stmt = select(Blockchain).where(Blockchain.id == id)
+        result: Result = await session.execute(stmt)
+
+        return result.scalar_one_or_none()
+
+    @staticmethod
     async def create(
         session: AsyncSession,
         blockchain_data: BlockchainSchemaBody,
