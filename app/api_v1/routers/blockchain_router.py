@@ -1,4 +1,5 @@
 from fastapi import APIRouter, status, Depends
+from fastapi_cache.decorator import cache
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api_v1.controllers import BlockchainController
@@ -17,6 +18,7 @@ router = APIRouter(
 
 
 @router.get("", status_code=status.HTTP_200_OK)
+@cache(expire=60)
 async def get_blockchains(
     pagination: BlockchainSchemaQueryPagination = Depends(
         BlockchainSchemaQueryPagination
@@ -31,6 +33,7 @@ async def get_blockchains(
 
 
 @router.get("/{segment_id}", status_code=status.HTTP_200_OK)
+@cache(expire=10)
 async def get_blockchain(
     segment_id: str,
     session: AsyncSession = Depends(db_factory.session_depends),

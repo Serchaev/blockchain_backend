@@ -1,5 +1,6 @@
 from fastapi import APIRouter, status, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
+from fastapi_cache.decorator import cache
 
 from app.api_v1.controllers import BlockController
 from app.api_v1.schemas import (
@@ -16,6 +17,7 @@ router = APIRouter(
 
 
 @router.get("", status_code=status.HTTP_200_OK)
+@cache(expire=10)
 async def get_blocks(
     block_data: BlockSchemaQuery = Depends(BlockSchemaQuery),
     pagination: BlockSchemaQueryPagination = Depends(BlockSchemaQueryPagination),
@@ -30,6 +32,7 @@ async def get_blocks(
 
 
 @router.get("{id}", status_code=status.HTTP_200_OK)
+@cache(expire=300)
 async def get_block(
     id: int,
     session: AsyncSession = Depends(db_factory.session_depends),
