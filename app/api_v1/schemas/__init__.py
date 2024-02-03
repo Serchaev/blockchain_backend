@@ -5,4 +5,11 @@ from .blockchain_schemas import (
     BlockchainSchemaQueryPagination,
 )
 
-from .block_schemas import BlockSchemaBody
+from .block_schemas import (
+    BlockSchemaAnswer,
+    BlockSchemaAnswerPagination,
+    BlockSchemaQueryPagination,
+    BlockSchemaQuery,
+)
+
+from .transaction_schemas import TransactionSchema
