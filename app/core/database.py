@@ -57,12 +57,22 @@ class RedisFactory:
     def __init__(self, host, port):
         self.host = host
         self.port = port
+        self.r = redis.Redis(
+            host=host,
+            port=port,
+            decode_responses=True,
+        )
+
+    def engine(self):
+        return self.r
 
 
 redis_factory = RedisFactory(
     host=settings.REDIS_HOST,
     port=settings.REDIS_PORT,
 )
+
+redis_engine = redis_factory.engine()
 
 
 class Base(DeclarativeBase):
