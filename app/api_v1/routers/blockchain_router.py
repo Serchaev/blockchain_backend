@@ -10,7 +10,10 @@ from app.api_v1.schemas import (
 )
 from app.core import db_factory
 
-router = APIRouter(tags=["Блокчейн"], prefix="/blockchain")
+router = APIRouter(
+    tags=["Блокчейн"],
+    prefix="/blockchain",
+)
 
 
 @router.get("", status_code=status.HTTP_200_OK)

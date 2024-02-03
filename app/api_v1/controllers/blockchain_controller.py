@@ -1,9 +1,11 @@
+from typing import Union
+
 from fastapi import HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api_v1.schemas import BlockchainSchemaBody
-from app.api_v1.services import BlockchainService
-from app.core import Blockchain
+from app.api_v1.services import BlockchainService, BlockService
+from app.core import Blockchain, Block
 
 
 class BlockchainController:
@@ -12,7 +14,7 @@ class BlockchainController:
         session: AsyncSession,
         limit: int,
         offset: int,
-    ) -> list[Blockchain]:
+    ) -> dict[str, Union[list[Block], int]]:
         segments = await BlockchainService.find_all(
             session=session,
             limit=limit,
@@ -25,7 +27,7 @@ class BlockchainController:
         return answer
 
     @staticmethod
-    async def get_blockchain(session: AsyncSession, segment_id: str):
+    async def get_blockchain(session: AsyncSession, segment_id: str) -> Blockchain:
         segment = await BlockchainService.find(session=session, segment_id=segment_id)
         if segment is not None:
             return segment
@@ -49,7 +51,11 @@ class BlockchainController:
                 status_code=status.HTTP_409_CONFLICT,
                 detail=f"Blockchain segment {blockchain_data.segment_id} already exists!",
             )
-        return await BlockchainService.create(
+        blockchain = await BlockchainService.create(
             session=session,
             blockchain_data=blockchain_data,
         )
+        await BlockService.create_genesis_block(
+            session=session, blockchain_id=blockchain.id
+        )
+        return blockchain
