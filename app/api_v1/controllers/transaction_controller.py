@@ -27,7 +27,7 @@ class TransactionController:
             )
         transaction = transaction_data.model_dump()
         transaction["timestamp"] = datetime.utcnow().strftime(
-            "%Y-%m-%d %H:%M:%S%z",
+            "%Y-%m-%d %H:%M:%S.%fZ",
         )
         await r.rpush(
             f"{settings.REDIS_PREFIX}-transaction::{segment_id}",
