@@ -3,17 +3,12 @@ from datetime import datetime
 
 import redis
 from sqlalchemy import NullPool, func
-from sqlalchemy.orm import (
-    DeclarativeBase,
-    Mapped,
-    mapped_column,
-    declared_attr,
-)
 from sqlalchemy.ext.asyncio import (
-    create_async_engine,
-    async_sessionmaker,
     async_scoped_session,
+    async_sessionmaker,
+    create_async_engine,
 )
+from sqlalchemy.orm import DeclarativeBase, Mapped, declared_attr, mapped_column
 
 from app.core.config import settings
 

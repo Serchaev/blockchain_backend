@@ -1,5 +1,5 @@
 import pytest
-from sqlalchemy.exc import IntegrityError, StatementError, DBAPIError
+from sqlalchemy.exc import DBAPIError, IntegrityError, StatementError
 
 from app.api_v1.services import BlockchainService, BlockService
 

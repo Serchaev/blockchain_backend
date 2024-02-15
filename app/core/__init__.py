@@ -1,4 +1,3 @@
 from .config import settings
-from .database import db_factory, Base, redis_factory, redis_engine
-from .models import Blockchain
-from .models import Block
+from .database import Base, db_factory, redis_engine, redis_factory
+from .models import Block, Blockchain

@@ -1,13 +1,13 @@
 import json
+
 import pytest_asyncio
 from fastapi_cache import FastAPICache
 from fastapi_cache.backends.redis import RedisBackend
-from redis import asyncio as aioredis
-
 from httpx import AsyncClient
+from redis import asyncio as aioredis
 from sqlalchemy import insert, text
 
-from app.core import Base, db_factory, settings, Blockchain, Block
+from app.core import Base, Block, Blockchain, db_factory, settings
 from app.main import app
 
 
