@@ -1,4 +1,5 @@
 from pathlib import Path
+from typing import Literal
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -14,16 +15,22 @@ class Setting(BaseSettings):
     DB_HOST: str
     DB_PORT: int
     DB_NAME: str
+    DB_USER_TEST: str
+    DB_PASS_TEST: str
+    DB_HOST_TEST: str
+    DB_PORT_TEST: int
+    DB_NAME_TEST: str
     REDIS_HOST: str
     REDIS_PORT: int
-    MODE: str
+    REDIS_PREFIX: str
+    MODE: Literal["DEV", "PROD", "TEST"]
 
     @property
     def db_url(self) -> str:
         if self.MODE == "DEV":
             return f"postgresql+asyncpg://{self.DB_USER}:{self.DB_PASS}@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}"
         if self.MODE == "TEST":
-            return f"postgresql+asyncpg://{self.DB_USER}:{self.DB_PASS}@{self.DB_HOST}:{self.DB_PORT}/test_{self.DB_NAME}"
+            return f"postgresql+asyncpg://{self.DB_USER_TEST}:{self.DB_PASS_TEST}@{self.DB_HOST_TEST}:{self.DB_PORT_TEST}/{self.DB_NAME_TEST}"
         if self.MODE == "PROD":
             return f"postgresql+asyncpg://{self.DB_USER}:{self.DB_PASS}@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}"
 

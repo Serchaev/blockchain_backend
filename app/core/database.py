@@ -1,6 +1,8 @@
 from asyncio import current_task
+from datetime import datetime
 
 import redis
+from sqlalchemy import NullPool, func
 from sqlalchemy.orm import (
     DeclarativeBase,
     Mapped,
@@ -15,6 +17,11 @@ from sqlalchemy.ext.asyncio import (
 
 from app.core.config import settings
 
+if settings.MODE == "TEST":
+    DATABASE_PARAMS = {"poolclass": NullPool}
+else:
+    DATABASE_PARAMS = {}
+
 
 class DatabaseFactory:
     def __init__(
@@ -25,6 +32,7 @@ class DatabaseFactory:
         self.engine = create_async_engine(
             url=db_url,
             echo=db_echo,
+            **DATABASE_PARAMS,
         )
 
         self.session_factory = async_sessionmaker(
@@ -54,9 +62,10 @@ db_factory = DatabaseFactory(
 
 
 class RedisFactory:
-    def __init__(self, host, port):
+    def __init__(self, host, port, prefix):
         self.host = host
         self.port = port
+        self.prefix = prefix
         self.r = redis.Redis(
             host=host,
             port=port,
@@ -70,6 +79,7 @@ class RedisFactory:
 redis_factory = RedisFactory(
     host=settings.REDIS_HOST,
     port=settings.REDIS_PORT,
+    prefix=settings.REDIS_PREFIX,
 )
 
 redis_engine = redis_factory.engine()
@@ -82,4 +92,10 @@ class Base(DeclarativeBase):
     def __tablename__(self) -> str:
         return f"{self.__name__.lower()}s"
 
-    id: Mapped[int] = mapped_column(primary_key=True)
+    created_at: Mapped[datetime] = mapped_column(server_default=func.now())
+    # updated_at: Mapped[datetime] = mapped_column(
+    #     default=func.now(),
+    #     onupdate=func.now(),
+    # )
+
+    # id: Mapped[int] = mapped_column(primary_key=True)

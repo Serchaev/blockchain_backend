@@ -1,0 +1,74 @@
+[
+  {
+    "segment_id": "we6qgf5dh0j",
+    "title": null,
+    "descr": null,
+    "deleted": false
+  },
+  {
+    "segment_id": "lhj5khg46mgn",
+    "title": "Общий",
+    "descr": null,
+    "deleted": null
+  },
+  {
+    "segment_id": "4tgg9uh42g5u9h",
+    "title": null,
+    "descr": null,
+    "deleted": true
+  },
+  {
+    "segment_id": "sz9k7kdxcfjerytih",
+    "title": "Рабочая",
+    "descr": null,
+    "deleted": false
+  },
+  {
+    "segment_id": "lhj5khg46mgn2",
+    "title": "Отдых",
+    "descr": null,
+    "deleted": null
+  },
+  {
+    "segment_id": "sz9k7kdxcfjerytih2",
+    "title": "Напоминания",
+    "descr": null,
+    "deleted": false
+  },
+  {
+    "segment_id": "2lhj5khg46mgn",
+    "title": "Сборка",
+    "descr": null,
+    "deleted": null
+  },
+  {
+    "segment_id": "2sz9k7kdxcfjerytih",
+    "title": "Чат автолюбителей",
+    "descr": null,
+    "deleted": false
+  },
+  {
+    "segment_id": "e8hw45ubf7",
+    "title": null,
+    "descr": null,
+    "deleted": null
+  },
+  {
+    "segment_id": "2lhj5khg46mgn2",
+    "title": "Семья",
+    "descr": null,
+    "deleted": null
+  },
+  {
+    "segment_id": "2sz9k7kdxcfjerytih2",
+    "title": "ИСТ",
+    "descr": null,
+    "deleted": false
+  },
+  {
+    "segment_id": "2e8hw45ubf72",
+    "title": null,
+    "descr": null,
+    "deleted": null
+  }
+]
