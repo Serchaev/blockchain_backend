@@ -5,6 +5,8 @@ from fastapi import FastAPI
 from fastapi_cache import FastAPICache
 from fastapi_cache.backends.redis import RedisBackend
 from redis import asyncio as aioredis
+from starlette import status
+from starlette.responses import RedirectResponse, Response
 
 from app.api_v1 import router
 from app.core import settings
@@ -19,7 +21,22 @@ async def lifespan(server: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 
-app.include_router(router=router)
+app_v1 = FastAPI(
+    title="API v1",
+    description="The first version of API",
+    docs_url="/docs",
+    redoc_url="/redoc",
+    version="1.0",
+)
+
+app_v1.include_router(router=router)
+
+app.mount("/api/v1", app_v1)
+
+
+@app.get("/api")
+async def api():
+    return {"url": "/api/v1/docs"}
 
 
 if __name__ == "__main__":
