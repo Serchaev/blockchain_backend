@@ -2,6 +2,7 @@ from typing import TYPE_CHECKING, Optional
 
 from datetime import datetime
 
+from sqlalchemy import DateTime, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from ..database import Base
@@ -13,7 +14,7 @@ if TYPE_CHECKING:
 class Blockchain(Base):
     __tablename__ = "blockchain"
 
-    segment_id: Mapped[str] = mapped_column(unique=True)
+    segment_id: Mapped[str] = mapped_column(unique=True, primary_key=True)
     title: Mapped[Optional[str]]
     descr: Mapped[Optional[str]]
     deleted: Mapped[Optional[bool]]
@@ -21,9 +22,7 @@ class Blockchain(Base):
     blocks: Mapped[list["Block"]] = relationship(back_populates="blockchain")
 
     def __str__(self):
-        return (
-            f'{self.__class__.__name__}(id={self.id}, segment_id="{self.segment_id}")'
-        )
+        return f'{self.__class__.__name__}(segment_id="{self.segment_id}")'
 
     def __repr__(self):
         return self.__str__()
