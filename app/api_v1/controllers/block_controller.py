@@ -64,7 +64,7 @@ class BlockController:
             )
         block = await BlockService.create(
             session=session,
-            blockchain_id=blockchain.id,
+            segment_id=blockchain.segment_id,
             **kwargs,
         )
         block.blockchain = blockchain

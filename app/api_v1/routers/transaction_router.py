@@ -14,9 +14,11 @@ router = APIRouter(
 @router.post("/add/{segment_id}")
 async def add_transaction(
     segment_id: str,
-    transaction_data: TransactionSchema = Depends(TransactionSchema),
+    transaction_data: TransactionSchema,
+    session: AsyncSession = Depends(db_factory.session_depends),
 ):
     return await TransactionController.add_transaction(
+        session=session,
         segment_id=segment_id,
         transaction_data=transaction_data,
     )

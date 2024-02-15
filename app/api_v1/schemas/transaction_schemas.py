@@ -4,4 +4,6 @@ from pydantic import BaseModel
 
 
 class TransactionSchema(BaseModel):
-    data: str
+    writer: str
+    reader: str
+    message: str

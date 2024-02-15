@@ -1,6 +1,7 @@
 from asyncio import current_task
 from datetime import datetime
 
+import aioredis
 import redis
 from sqlalchemy import NullPool, func
 from sqlalchemy.ext.asyncio import (
@@ -61,11 +62,7 @@ class RedisFactory:
         self.host = host
         self.port = port
         self.prefix = prefix
-        self.r = redis.Redis(
-            host=host,
-            port=port,
-            decode_responses=True,
-        )
+        self.r = aioredis.from_url(f"redis://{host}:{port}", decode_responses=True)
 
     def engine(self):
         return self.r
