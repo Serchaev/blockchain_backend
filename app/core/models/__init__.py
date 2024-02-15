@@ -1,2 +1,2 @@
-from .block import Block
-from .blockchain import Blockchain
+from .block import Block  # noqa
+from .blockchain import Blockchain  # noqa

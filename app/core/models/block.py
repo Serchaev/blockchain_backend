@@ -29,7 +29,7 @@ class Block(Base):
     )
 
     def __str__(self):
-        return f'{self.__class__.__name__}(segment_id={self.segment_id}, data="{self.data}", previous_hash="{self.previous_hash}", actual_hash="{self.actual_hash}")'
+        return f'{self.__class__.__name__}(segment_id={self.segment_id}, data="{self.data}", previous_hash="{self.previous_hash}", actual_hash="{self.actual_hash}")'  # noqa
 
     def __repr__(self):
         return self.__str__()

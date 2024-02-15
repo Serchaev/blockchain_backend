@@ -1,3 +1,3 @@
-from .config import settings
-from .database import Base, db_factory, redis_engine, redis_factory
-from .models import Block, Blockchain
+from .config import settings  # noqa
+from .database import Base, db_factory, redis_engine, redis_factory  # noqa
+from .models import Block, Blockchain  # noqa

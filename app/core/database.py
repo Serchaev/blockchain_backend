@@ -2,7 +2,6 @@ from asyncio import current_task
 from datetime import datetime
 
 import aioredis
-import redis
 from sqlalchemy import NullPool, func
 from sqlalchemy.ext.asyncio import (
     async_scoped_session,

@@ -5,7 +5,6 @@ from sqlalchemy.engine import Result
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.sql.functions import func
 
-from app.api_v1.schemas import BlockchainSchemaBody
 from app.core import Blockchain
 
 

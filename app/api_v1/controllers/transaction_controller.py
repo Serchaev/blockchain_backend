@@ -1,5 +1,4 @@
 import json
-import time
 from datetime import datetime
 
 from fastapi import HTTPException
@@ -9,7 +8,8 @@ from starlette import status
 from app.api_v1.controllers import BlockController
 from app.api_v1.schemas import TransactionSchema
 from app.api_v1.services import BlockchainService
-from app.core import redis_engine as r, settings
+from app.core import redis_engine as r
+from app.core import settings
 
 
 class TransactionController:

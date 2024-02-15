@@ -1,4 +1,4 @@
-from typing import Union, Optional
+from typing import Optional, Union
 
 from fastapi import HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -49,7 +49,7 @@ class BlockchainController:
         if segment is not None:
             raise HTTPException(
                 status_code=status.HTTP_409_CONFLICT,
-                detail=f"Blockchain segment {blockchain_data.segment_id} already exists!",
+                detail=f"Blockchain segment {blockchain_data.segment_id} already exists!",  # noqa
             )
         blockchain = await BlockchainService.create(
             session=session,

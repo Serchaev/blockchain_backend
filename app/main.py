@@ -5,8 +5,6 @@ from fastapi import FastAPI
 from fastapi_cache import FastAPICache
 from fastapi_cache.backends.redis import RedisBackend
 from redis import asyncio as aioredis
-from starlette import status
-from starlette.responses import RedirectResponse, Response
 
 from app.api_v1 import router
 from app.core import settings
