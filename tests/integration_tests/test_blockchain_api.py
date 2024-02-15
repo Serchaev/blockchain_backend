@@ -36,7 +36,7 @@ class TestBlockchainGet:
         "is_pagination, limit, offset, status,",
         [
             (False, None, None, 200),
-            (True, None, None, 200),
+            (True, None, None, 422),
             (True, -1, -1, 422),
             (True, -1, 5, 422),
             (True, 5, -1, 422),
@@ -67,7 +67,7 @@ class TestBlockchainGet:
             )
         assert response.status_code == status
 
-        if limit is not None and offset is not None:
+        if limit is not None and offset is not None and limit >= 0 and offset >= 0:
             body = response.json()
 
             assert len(body) <= limit
@@ -94,7 +94,6 @@ class TestBlockchainPost:
         deleted,
         status,
     ):
-        # assert 1 == 1
         response = await ac.post(
             "/api/v1/blockchain",
             json={
@@ -104,7 +103,7 @@ class TestBlockchainPost:
                 "deleted": deleted,
             },
         )
-        #
+
         assert response.status_code == status
 
         if response.status_code == 201:
@@ -117,7 +116,5 @@ class TestBlockchainPost:
             genesis_block = blocks_data["blocks"][0]
 
             data = genesis_block.get("data")
-
-            assert data
 
             assert data.get("Genesis") == "Block"

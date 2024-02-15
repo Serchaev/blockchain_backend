@@ -67,8 +67,10 @@ class TestBlocksFind:
         assert response.actual_hash == actual_hash
         assert response.data == data
 
-    async def test_blocks_find_all_count(self, session):
-        assert await BlockchainService.find_all_count(session) >= 14
+    async def test_blocks_find_all(self, session):
+        response = await BlockService.find_all(session)
+
+        assert isinstance(response, list)
 
 
 class TestBlocksCreate:

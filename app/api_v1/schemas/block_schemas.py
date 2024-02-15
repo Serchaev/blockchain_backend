@@ -1,16 +1,14 @@
-from typing import Optional
+from typing import Optional, Union, Annotated
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class BlockSchema(BaseModel):
-    blockchain_id: int
-    timestamp: Optional[float]
-    data: str
+    segment_id: str
+    data: Union[dict, list[dict]]
 
 
 class _BlockchainSchema(BaseModel):
-    id: int
     segment_id: str
     title: Optional[str]
     descr: Optional[str]
@@ -32,8 +30,8 @@ class BlockSchemaAnswerPagination(BaseModel):
 class BlockSchemaQueryPagination:
     def __init__(
         self,
-        limit: int = 100,
-        offset: int = 0,
+        limit: Annotated[int, Field(ge=0)] = None,
+        offset: Annotated[int, Field(ge=0)] = None,
     ):
         self.limit = limit
         self.offset = offset

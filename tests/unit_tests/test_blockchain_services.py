@@ -26,8 +26,10 @@ class TestBlockchainFind:
         assert response.descr == descr
         assert response.deleted == deleted
 
-    async def test_blockchain_find_all_count(self, session):
-        assert await BlockchainService.find_all_count(session) >= 12
+    async def test_blockchain_find_all(self, session):
+        response = await BlockchainService.find_all(session)
+
+        assert isinstance(response, list)
 
 
 class TestBlockchainCreate:

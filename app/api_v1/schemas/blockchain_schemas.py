@@ -1,6 +1,6 @@
-from typing import Optional
+from typing import Optional, Annotated
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class BlockchainSchema(BaseModel):
@@ -15,7 +15,7 @@ class BlockchainSchemaBody(BlockchainSchema):
 
 
 class BlockchainSchemaAnswer(BlockchainSchema):
-    id: int
+    pass
 
 
 class BlockchainSchemaAnswerPagination(BaseModel):
@@ -26,8 +26,8 @@ class BlockchainSchemaAnswerPagination(BaseModel):
 class BlockchainSchemaQueryPagination:
     def __init__(
         self,
-        limit: int = 10,
-        offset: int = 0,
+        limit: Annotated[int, Field(ge=0)] = None,
+        offset: Annotated[int, Field(ge=0)] = None,
     ):
         self.limit = limit
         self.offset = offset

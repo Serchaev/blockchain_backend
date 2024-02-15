@@ -1,7 +1,9 @@
 from fastapi import APIRouter, Depends
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api_v1.controllers import TransactionController
-from app.api_v1.schemas import TransactionSchema
+from app.api_v1.schemas import BlockSchemaAnswer, TransactionSchema
+from app.core import db_factory
 
 router = APIRouter(
     prefix="/transaction",
@@ -23,5 +25,9 @@ async def add_transaction(
 @router.post("/register/{segment_id}")
 async def register_transaction(
     segment_id: str,
-):
-    return await TransactionController.register_transaction(segment_id=segment_id)
+    session: AsyncSession = Depends(db_factory.session_depends),
+) -> BlockSchemaAnswer:
+    return await TransactionController.register_transaction(
+        session=session,
+        segment_id=segment_id,
+    )

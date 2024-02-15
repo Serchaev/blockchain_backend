@@ -1,7 +1,7 @@
 import pytest
 
 
-class TestBlockchainGet:
+class TestBlocksGet:
     @pytest.mark.parametrize(
         "id, segment_id, previous_hash, actual_hash, data, title, descr, deleted,",
         [
@@ -50,7 +50,7 @@ class TestBlockchainGet:
             (5, "4tgg9uh42g5u9h", None, None, {"Genesis": "Block"}, None, None, True),
         ],
     )
-    async def test_blockchain_api_get_block(
+    async def test_block_api_get_block(
         self,
         ac,
         id,
@@ -82,7 +82,7 @@ class TestBlockchainGet:
         "is_pagination, limit, offset, status,",
         [
             (False, None, None, 200),
-            (True, None, None, 200),
+            (True, None, None, 422),
             (True, -1, -1, 422),
             (True, -1, 5, 422),
             (True, 5, -1, 422),
@@ -91,7 +91,7 @@ class TestBlockchainGet:
             (True, 15, 10, 200),
         ],
     )
-    async def test_blockchain_api_get_blockchains(
+    async def test_block_api_get_blocks(
         self,
         ac,
         is_pagination,
@@ -101,11 +101,11 @@ class TestBlockchainGet:
     ):
         if not is_pagination:
             response = await ac.get(
-                "/api/v1/blockchain",
+                "/api/v1/block",
             )
         else:
             response = await ac.get(
-                "/api/v1/blockchain",
+                "/api/v1/block",
                 params={
                     "limit": limit,
                     "offset": offset,
@@ -113,7 +113,7 @@ class TestBlockchainGet:
             )
         assert response.status_code == status
 
-        if limit is not None and offset is not None:
+        if limit is not None and offset is not None and limit >= 0 and offset >= 0:
             body = response.json()
 
             assert len(body) <= limit

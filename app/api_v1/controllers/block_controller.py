@@ -1,11 +1,11 @@
 import asyncio
 import json
-from typing import Union
+from typing import Union, Optional
 
 from fastapi import HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.api_v1.services import BlockService, BlockchainService
+from app.api_v1.services import BlockchainService, BlockService
 from app.core import Block
 
 
@@ -13,9 +13,9 @@ class BlockController:
     @staticmethod
     async def get_blocks(
         session: AsyncSession,
+        limit: Optional[int] = None,
+        offset: Optional[int] = None,
         segment_id: str = None,
-        limit: int = 100,
-        offset: int = 0,
     ) -> dict[str, Union[list[Block], int]]:
         blocks = await BlockService.find_all(
             session=session,
@@ -31,7 +31,7 @@ class BlockController:
         return answer
 
     @staticmethod
-    async def get_Block(
+    async def get_block(
         session: AsyncSession,
         id: int,
     ) -> Block:
@@ -50,20 +50,21 @@ class BlockController:
     @staticmethod
     async def add_block(
         session: AsyncSession,
+        segment_id: str,
         **kwargs,
     ) -> Block:
-        blockchain = await BlockchainService.find_by_id(
+        blockchain = await BlockchainService.find(
             session=session,
-            id=kwargs.get("blockchain_id"),
+            segment_id=segment_id,
         )
         if blockchain is None:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail=f"Blockchain {kwargs.get('blockchain_id')} not found!",
             )
-        kwargs["data"] = str(kwargs.get("data"))
         block = await BlockService.create(
             session=session,
+            blockchain_id=blockchain.id,
             **kwargs,
         )
         block.blockchain = blockchain

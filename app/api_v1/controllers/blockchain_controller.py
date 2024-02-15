@@ -1,19 +1,19 @@
-from typing import Union
+from typing import Union, Optional
 
 from fastapi import HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api_v1.schemas import BlockchainSchemaBody
 from app.api_v1.services import BlockchainService, BlockService
-from app.core import Blockchain, Block
+from app.core import Block, Blockchain
 
 
 class BlockchainController:
     @staticmethod
     async def get_blockchains(
         session: AsyncSession,
-        limit: int,
-        offset: int,
+        limit: Optional[int] = None,
+        offset: Optional[int] = None,
     ) -> dict[str, Union[list[Block], int]]:
         segments = await BlockchainService.find_all(
             session=session,
@@ -53,9 +53,10 @@ class BlockchainController:
             )
         blockchain = await BlockchainService.create(
             session=session,
-            blockchain_data=blockchain_data,
+            **blockchain_data.model_dump(exclude_none=True),
         )
         await BlockService.create_genesis_block(
-            session=session, blockchain_id=blockchain.id
+            session=session,
+            segment_id=blockchain.segment_id,
         )
         return blockchain

@@ -13,16 +13,20 @@ class BlockchainService:
     @staticmethod
     async def find_all(
         session: AsyncSession,
-        limit: int,
-        offset: int,
+        limit: Optional[int] = None,
+        offset: Optional[int] = None,
     ) -> list[Blockchain]:
-        stmt = select(Blockchain).order_by(Blockchain.id).limit(limit).offset(offset)
+        stmt = select(Blockchain).order_by(Blockchain.segment_id)
+        if limit is not None:
+            stmt = stmt.limit(limit=limit)
+        if offset is not None:
+            stmt = stmt.offset(offset=offset)
         result: Result = await session.execute(stmt)
         return result.scalars().all()
 
     @staticmethod
     async def find_all_count(session: AsyncSession) -> list[Blockchain]:
-        stmt = select(func.count(Blockchain.id))
+        stmt = select(func.count(Blockchain.segment_id))
         result: Result = await session.execute(stmt)
         return result.scalar()
 
@@ -49,9 +53,9 @@ class BlockchainService:
     @staticmethod
     async def create(
         session: AsyncSession,
-        blockchain_data: BlockchainSchemaBody,
+        **kwargs,
     ) -> Blockchain:
-        blockchain = Blockchain(**blockchain_data.model_dump(exclude_none=True))
+        blockchain = Blockchain(**kwargs)
         session.add(blockchain)
         await session.commit()
         return blockchain

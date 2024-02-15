@@ -1,13 +1,13 @@
-from fastapi import APIRouter, status, Depends
-from sqlalchemy.ext.asyncio import AsyncSession
+from fastapi import APIRouter, Depends, status
 from fastapi_cache.decorator import cache
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api_v1.controllers import BlockController
 from app.api_v1.schemas import (
-    BlockSchemaQueryPagination,
-    BlockSchemaQuery,
     BlockSchemaAnswer,
     BlockSchemaAnswerPagination,
+    BlockSchemaQuery,
+    BlockSchemaQueryPagination,
 )
 from app.core import db_factory
 
@@ -38,7 +38,7 @@ async def get_block(
     id: int,
     session: AsyncSession = Depends(db_factory.session_depends),
 ) -> BlockSchemaAnswer:
-    return await BlockController.get_Block(
+    return await BlockController.get_block(
         session=session,
         id=id,
     )

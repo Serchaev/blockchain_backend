@@ -1,12 +1,12 @@
-from fastapi import APIRouter, status, Depends
+from fastapi import APIRouter, Depends, status
 from fastapi_cache.decorator import cache
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api_v1.controllers import BlockchainController
 from app.api_v1.schemas import (
     BlockchainSchemaAnswer,
-    BlockchainSchemaBody,
     BlockchainSchemaAnswerPagination,
+    BlockchainSchemaBody,
     BlockchainSchemaQueryPagination,
 )
 from app.core import db_factory
@@ -44,13 +44,16 @@ async def get_blockchain(
     )
 
 
-@router.post("", status_code=status.HTTP_201_CREATED)
+@router.post(
+    "",
+    status_code=status.HTTP_201_CREATED,
+)  # создает новый сегмент с genesis блоком
 async def add_blockchain(
     blockchain_data: BlockchainSchemaBody,
     session: AsyncSession = Depends(
         db_factory.session_depends,
     ),
-) -> BlockchainSchemaAnswer:
+):
     return await BlockchainController.add_blockchain(
         session=session,
         blockchain_data=blockchain_data,

@@ -1,6 +1,7 @@
 import time
+from typing import Optional
 
-from sqlalchemy import select, func
+from sqlalchemy import func, select
 from sqlalchemy.engine import Result
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import joinedload
@@ -12,18 +13,20 @@ class BlockService:
     @staticmethod
     async def find_all(
         session: AsyncSession,
-        segment_id: str = None,
-        limit: int = 100,
-        offset: int = 0,
+        limit: Optional[int] = None,
+        offset: Optional[int] = None,
+        segment_id: Optional[str] = None,
     ) -> list[Block]:
         stmt = (
             select(Block)
             .join(Block.blockchain)
             .order_by(Block.id)
-            .limit(limit=limit)
-            .offset(offset=offset)
             .options(joinedload(Block.blockchain))
         )
+        if limit is not None:
+            stmt = stmt.limit(limit=limit)
+        if offset is not None:
+            stmt = stmt.offset(offset=offset)
         if segment_id is not None:
             stmt = stmt.where(Blockchain.segment_id == segment_id)
         result: Result = await session.execute(stmt)
@@ -65,23 +68,12 @@ class BlockService:
     @staticmethod
     async def create_genesis_block(
         session: AsyncSession,
-        blockchain_id: int,
+        segment_id: str,
     ) -> Block:
         block = Block(
-            timestamp=time.time(),
-            data=str(
-                [
-                    {
-                        "writer": "",
-                        "reader": "",
-                        "message": "Genesis Block",
-                        "file": None,
-                        "timestamp": f"{time.time()}",
-                    }
-                ]
-            ),
+            data={"Genesis": "Block"},
             previous_hash="0",
-            blockchain_id=blockchain_id,
+            segment_id=segment_id,
         )
         session.add(block)
         await session.commit()
