@@ -17,17 +17,19 @@ class Block(Base):
     previous_hash: Mapped[str] = mapped_column(nullable=True)
     actual_hash: Mapped[str] = mapped_column(nullable=True)
     segment_id: Mapped[str] = mapped_column(
-        ForeignKey("blockchain.segment_id"),
+        ForeignKey("blockchain.segment_id", ondelete="cascade"),
     )
     data = Column(
         JSONB,
         default=text("'{}'::jsonb"),
         server_default=text("'{}'::jsonb"),
     )
-    blockchain: Mapped["Blockchain"] = relationship(back_populates="blocks")
+    blockchain: Mapped["Blockchain"] = relationship(
+        back_populates="blocks", cascade="all, delete"
+    )
 
     def __str__(self):
-        return f'{self.__class__.__name__}(segment_id={self.segment_id}, data="{self.data}", previous_hash="{self.previous_hash}", actual_hash="{self.actual_hash}", timestamp={self.timestamp})'
+        return f'{self.__class__.__name__}(segment_id={self.segment_id}, data="{self.data}", previous_hash="{self.previous_hash}", actual_hash="{self.actual_hash}")'
 
     def __repr__(self):
         return self.__str__()
