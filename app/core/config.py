@@ -23,6 +23,10 @@ class Setting(BaseSettings):
     REDIS_HOST: str
     REDIS_PORT: int
     REDIS_PREFIX: str
+    CELERY_USER: str
+    CELERY_PASS: str
+    CELERY_HOST: str
+    CELERY_BROKER: str
     MODE: Literal["DEV", "PROD", "TEST"]
 
     @property
@@ -39,6 +43,10 @@ class Setting(BaseSettings):
         if self.MODE == "PROD":
             return False
         return True
+
+    @property
+    def celery_broker(self) -> str:
+        return f"{self.CELERY_BROKER}://{self.CELERY_USER}:{self.CELERY_PASS}@{self.CELERY_HOST}/"  # noqa
 
 
 settings = Setting()
