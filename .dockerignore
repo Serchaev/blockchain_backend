@@ -1,0 +1,8 @@
+.pytest_cache
+tests
+venv
+.coverage
+.flake8
+.gitignore
+celerybeat-schedule.*
+pytest.ini

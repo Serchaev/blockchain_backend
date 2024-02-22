@@ -1,0 +1,86 @@
+version: '3'
+
+services:
+  postgres_db:
+    container_name: postgres_container
+    restart: always
+    image: postgres:15.2
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: messanger_blockchain
+    volumes:
+      - ./docker/data-postgres:/var/lib/postgresql/data
+
+  pgadmin:
+    container_name: pgadmin_container
+    restart: always
+    image: dpage/pgadmin4:8.3
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "admin@blockchain.com"
+      PGADMIN_DEFAULT_PASSWORD: "admin1234"
+    volumes:
+      - ./docker/data-pgadmin:/var/lib/pgadmin
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres_db
+
+  redis_db:
+    container_name: redis_container
+    restart: always
+    image: redis/redis-stack-server:latest
+
+  rabbitmq:
+    container_name: rabbitmq_container
+    restart: always
+    image: rabbitmq:3.12.13-management
+    hostname: rabbitmq
+    environment:
+      - RABBITMQ_DEFAULT_USER=rmuser
+      - RABBITMQ_DEFAULT_PASS=rmpassword
+      - RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS=-rabbit log_levels [{connection,error},{default,error}] disk_free_limit 2147483648
+    volumes:
+      - ./docker/data-rabbitmq:/var/lib/rabbitmq
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+
+  app_backend:
+    container_name: app_backend_container
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - .env_non_dev
+    depends_on:
+      - postgres_db
+      - redis_db
+    ports:
+      - "8000:80"
+
+  celery:
+    container_name: celery_container
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile-sample
+    env_file:
+      - .env_non_dev
+    command: celery --app=app.tasks.config:celery_app worker -l INFO --pool=solo
+    depends_on:
+      - rabbitmq
+
+  beat:
+    container_name: beat_container
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile-sample
+    env_file:
+      - .env_non_dev
+    command: celery --app=app.tasks.config:celery_app beat -l INFO
+    depends_on:
+      - postgres_db
+      - rabbitmq
+      - celery
