@@ -7,7 +7,7 @@ class TestBlocksFind:
     @pytest.mark.parametrize(
         "id, segment_id, previous_hash, actual_hash, data,",
         [
-            (1, "we6qgf5dh0j", None, None, {"Genesis": "Block"}),
+            (1, "we6qgf5dh0j", "0", None, {"Genesis": "Block"}),
             (
                 2,
                 "we6qgf5dh0j",
@@ -42,8 +42,8 @@ class TestBlocksFind:
                     }
                 ],
             ),
-            (4, "lhj5khg46mgn", None, None, {"Genesis": "Block"}),
-            (5, "4tgg9uh42g5u9h", None, None, {"Genesis": "Block"}),
+            (4, "lhj5khg46mgn", "0", None, {"Genesis": "Block"}),
+            (5, "4tgg9uh42g5u9h", "0", None, {"Genesis": "Block"}),
         ],
     )
     async def test_blocks_find(
@@ -79,8 +79,8 @@ class TestBlocksCreate:
             ("2e8hw45ubf72", None, None, {}),
             (
                 "2sz9k7kdxcfjerytih2",
-                "",
-                "",
+                None,
+                None,
                 [
                     {
                         "writer": "German",

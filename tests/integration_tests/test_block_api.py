@@ -5,7 +5,7 @@ class TestBlocksGet:
     @pytest.mark.parametrize(
         "id, segment_id, previous_hash, actual_hash, data, title, descr, deleted,",
         [
-            (1, "we6qgf5dh0j", None, None, {"Genesis": "Block"}, None, None, False),
+            (1, "we6qgf5dh0j", "0", None, {"Genesis": "Block"}, None, None, False),
             (
                 2,
                 "we6qgf5dh0j",
@@ -46,8 +46,8 @@ class TestBlocksGet:
                 None,
                 False,
             ),
-            (4, "lhj5khg46mgn", None, None, {"Genesis": "Block"}, "Общий", None, None),
-            (5, "4tgg9uh42g5u9h", None, None, {"Genesis": "Block"}, None, None, True),
+            (4, "lhj5khg46mgn", "0", None, {"Genesis": "Block"}, "Общий", None, None),
+            (5, "4tgg9uh42g5u9h", "0", None, {"Genesis": "Block"}, None, None, True),
         ],
     )
     async def test_block_api_get_block(

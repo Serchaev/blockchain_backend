@@ -8,25 +8,27 @@ BASE_DIR = Path(__file__).parent.parent.parent
 
 class Setting(BaseSettings):
     model_config = SettingsConfigDict(
-        env_file=BASE_DIR.joinpath(".env"),
+        env_file=BASE_DIR.joinpath(".env_non_dev"),
     )
     DB_USER: str
     DB_PASS: str
     DB_HOST: str
     DB_PORT: int
     DB_NAME: str
+
     DB_USER_TEST: str
     DB_PASS_TEST: str
     DB_HOST_TEST: str
     DB_PORT_TEST: int
     DB_NAME_TEST: str
+
     REDIS_HOST: str
     REDIS_PORT: int
     REDIS_PREFIX: str
-    CELERY_USER: str
-    CELERY_PASS: str
-    CELERY_HOST: str
-    CELERY_BROKER: str
+
+    CELERY_CH_TIME_DELTA: int
+    BROKER_URL: str
+
     MODE: Literal["DEV", "PROD", "TEST"]
 
     @property
@@ -39,14 +41,16 @@ class Setting(BaseSettings):
             return f"postgresql+asyncpg://{self.DB_USER}:{self.DB_PASS}@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}"  # noqa
 
     @property
+    def db_sync_url(self) -> str:
+        if self.MODE == "PROD":
+            return f"postgresql+psycopg2://{self.DB_USER}:{self.DB_PASS}@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}"  # noqa
+        return f"postgresql+psycopg2://{self.DB_USER_TEST}:{self.DB_PASS_TEST}@{self.DB_HOST_TEST}:{self.DB_PORT_TEST}/{self.DB_NAME_TEST}"  # noqa
+
+    @property
     def db_echo(self) -> bool:
         if self.MODE == "PROD":
             return False
         return True
-
-    @property
-    def celery_broker(self) -> str:
-        return f"{self.CELERY_BROKER}://{self.CELERY_USER}:{self.CELERY_PASS}@{self.CELERY_HOST}/"  # noqa
 
 
 settings = Setting()
